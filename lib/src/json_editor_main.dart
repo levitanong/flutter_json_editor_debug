@@ -125,6 +125,7 @@ class _JsonEditorState extends State<JsonEditor> {
 
   @override
   void initState() {
+    debugPrint("initState");
     if (widget.jsonString != null) {
       _editController.text = widget.jsonString!;
       if (!_analyzeSync()) {
@@ -134,6 +135,7 @@ class _JsonEditorState extends State<JsonEditor> {
     } else if (widget.jsonObj != null) {
       try {
         _editController.text = jsonEncode(widget.jsonObj);
+        debugPrint("editController.text set in initState");
         if (!_analyzeSync()) {
           _reformat();
         }
@@ -154,8 +156,10 @@ class _JsonEditorState extends State<JsonEditor> {
 
   @override
   void didUpdateWidget(covariant JsonEditor oldWidget) {
+    debugPrint("didUpdateWidget");
     if (widget.jsonString != oldWidget.jsonString) {
       _editController.text = widget.jsonString!;
+      debugPrint("didUpdateWidget analyzeSync");
       if (!_analyzeSync()) {
         _reformat();
       }
@@ -328,7 +332,9 @@ class _JsonEditorState extends State<JsonEditor> {
           });
           try {
             var value = JsonElement.fromString(text);
+            debugPrint("it's probably because onValueChanged is called here");
             widget.onValueChanged?.call(value);
+            debugPrint("onValueChanged was called");
           } catch (e) {
             hasError = true;
             error(object: this, message: 'analyze error', err: e);
